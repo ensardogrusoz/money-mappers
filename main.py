@@ -112,8 +112,22 @@ class Expenses(webapp2.RequestHandler):
         expenses = Expense(date = wrappeddate, foods = food, price1 = price1, transportation = transportation, price2 = price2, entertainment = entertainment, price3 = price3)
         expenses.put()
 
+class MonthlyExpenses(webapp2.RequestHandler):
+    def get(self):
+        self.response.write("This is the monthly expense page")
+    def post(self):
+        monthly_template = the_jinja_env.get_template('template/monthly.html')
+        self.response.write(monthly_template.render())
+
+class Home(webapp2.RequestHandler):
+    def get(self):
+        home_template = the_jinja_env.get_template('template/welcome.html')
+        self.response.write(home_template.render())
+
+
 app = webapp2.WSGIApplication([
-  ('/', MainHandler),
+  ('/', Home),
   ('/mainpage', MainPage),
-  ('/expense', Expenses)
+  ('/expense', Expenses),
+  ('/monthly', MonthlyExpenses)
 ], debug=True)
