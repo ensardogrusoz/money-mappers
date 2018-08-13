@@ -1,7 +1,9 @@
 from google.appengine.ext import ndb
 
+class Date(ndb.Model):
+    date = ndb.DateProperty(required=True)
+    
 class Food_Ex(ndb.Model):
-    # date = ndb.DateProperty(required=True)
     foods = ndb.StringProperty(required=True)
     price1 = ndb.StringProperty(required=True)
 

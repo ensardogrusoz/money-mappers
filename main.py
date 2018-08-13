@@ -1,7 +1,7 @@
 import webapp2
 import jinja2
 import os
-from dailyexpenses import Expense
+from dailyexpenses import Date, Food_Ex, Transportation_Ex, Entertainment_Ex
 import json
 from datetime import datetime
 
@@ -96,7 +96,7 @@ class Expenses(webapp2.RequestHandler):
         # food_list = []
         # food_list.append(food)
         price1 = self.request.get('user-in-2', allow_multiple=True)
-        transportation = self.request.get('user-in-3')
+        transportation = self.request.get('user-in-3', allow_multiple=True)
         price2 = self.request.get('user-in-4')
         entertainment = self.request.get('user-in-5')
         price3 = self.request.get('user-in-6')
@@ -118,25 +118,21 @@ class Expenses(webapp2.RequestHandler):
         }
         self.response.write(expense_template.render(variable_dict))
         wrappeddate = datetime.strptime(date, "%Y-%m-%d")
-        expenses = Expense(date = wrappeddate, foods = food, price1 = price1, transportation = transportation, price2 = price2, entertainment = entertainment, price3 = price3)
+        daTe = Date(date = wrappeddate)
+        expenses = Food_Ex(foods = food, price1 = price1)
+        transport_ex = Transportation_Ex(transportation = transportation, price2 = price2)
+        entertain_ex = Entertainment_Ex(entertainment = entertainment, price3 = price3)
         expenses.put()
-
-class MonthlyExpenses(webapp2.RequestHandler):
-    def get(self):
-        self.response.write("This is the monthly expense page")
-    def post(self):
-        monthly_template = the_jinja_env.get_template('template/monthly.html')
-        self.response.write(monthly_template.render())
+        transport_ex.put()
+        entertain_ex.put()
 
 class Home(webapp2.RequestHandler):
     def get(self):
         home_template = the_jinja_env.get_template('template/welcome.html')
         self.response.write(home_template.render())
 
-
 app = webapp2.WSGIApplication([
   ('/', Home),
   ('/mainpage', MainPage),
-  ('/expense', Expenses),
-  ('/monthly', MonthlyExpenses)
+  ('/expense', Expenses)
 ], debug=True)
