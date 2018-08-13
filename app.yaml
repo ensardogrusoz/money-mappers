@@ -9,6 +9,9 @@ handlers:
   static_files: favicon.ico
   upload: favicon\.ico
 
+- url: /images
+  static_dir: images
+  
 #static directories should go ABOVE the catch all url (.*)
 - url: .*
   script: main.app

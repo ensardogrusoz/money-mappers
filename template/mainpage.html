@@ -36,7 +36,7 @@
     }
     </style>
     <script>
-      function addExpense(){
+      function addExpense(event){
         var build="";
         var price = document.getElementById("price").value;
         var node = document.createElement("li");
@@ -74,7 +74,7 @@
   </head>
   <body>
     <div class = "topnav">
-        <img id= "logo" src="moneymappers.png">
+        <img id= "logo" src="/images/moneymappers.png">
         <button type="button" class="btn btn-outline-light"><a href="welcome.html">Home</a></button>
         <button type="button" class="btn btn-outline-light"><a href="login.html">Login</a></button>
     </div>
@@ -100,6 +100,9 @@
         <ul id='list3'></ul>
       </div>
       <button type="button" data-toggle="modal" data-target="#myModal3"class="btn btn-outline-primary">Add Expenses</button><br><br>
+      <button type="button" class="btn btn-outline-light" onclick=add()>Add Category</button>
+
+      <button type="submit" class="btn btn-outline-success">Add Expenses for Today</button>
       <!-- <div class="container">
 
           Open modal
@@ -122,7 +125,7 @@
                Enter Price: <input type="text" onfocus="this.value=''" name="user-in-2" id="price">
                <br>
                <br>
-               <button onclick="addExpense()">Add Expense</button>
+               <button type ="button" onclick="addExpense()">Add Expense</button>
                <br>
              </div>
 
@@ -133,8 +136,8 @@
 
            </div>
          </div>
-       </div>
-      </div>
+        </div>
+      <!-- </div> -->
 
         <div class="modal fade" id="myModal2">
            <div class="modal-dialog">
@@ -154,7 +157,7 @@
                  Enter Price: <input type="text" onfocus="this.value=''" name="user-in-4" id="price2">
                  <br>
                  <br>
-                 <button onclick="addExpense2()">Add Expense</button>
+                 <button type= "button" onclick="addExpense2()">Add Expense</button>
                  <br>
                </div>
 
@@ -185,7 +188,7 @@
                   Enter Price: <input type="text" onfocus="this.value=''" name="user-in-6" id="price3">
                   <br>
                   <br>
-                  <button onclick="addExpense3()">Add Expense</button>
+                  <button type = "button" onclick="addExpense3()">Add Expense</button>
                   <br>
                 </div>
 
@@ -197,11 +200,7 @@
               </div>
             </div>
           </div>
-         </div>
-
-         <button type="button" class="btn btn-outline-light" onclick=add()>Add Category</button>
-
-         <button type="submit" class="btn btn-outline-success">Add Expenses for Today</button>
+         <!-- </div> -->
        </form>
   </body>
 </html>
