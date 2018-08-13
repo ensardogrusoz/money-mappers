@@ -1,20 +1,39 @@
-import webapp2
-import jinja2
-import os
-from dailyexpenses import Expense
-import json
-from datetime import datetime
+"""Simple example app to demonstrate storing info for users.
 
+CSSI-ers!  If you want to have users log in to your site and store
+info about them, here is a simple AppEngine app demonstrating
+how to do that.  The typical usage is:
+
+- First, user visits the site, and sees a message to log in.
+- The user follows the link to the Google login page, and logs in.
+- The user is redirected back to your app's signup page to sign
+  up.
+- The user then gets a page thanking them for signup.
+
+- In the future, whenever the user is logged in, they'll see a 
+  message greeting them by name.
+
+Try logging out and logging back in with a fake email address
+to create a different account (when you "log in" running your
+local server, it doesn't ask for a password, and you can make
+up whatever email you like).
+
+The key piece that makes all of this work is tying the datastore
+entity to the AppEngine user id, by passing the special property
+id when creating the datastore entity.
+
+cssi_user = CssiUser(..., id=user.user_id())
+cssi_user.put()
+
+and then, looking it up later by doing
+
+cssi_user = CssiUser.get_by_id(user.user_id())
+"""
+
+import webapp2
 
 from google.appengine.api import users
 from google.appengine.ext import ndb
-
-the_jinja_env = jinja2.Environment(
-    loader=jinja2.FileSystemLoader(os.path.dirname(__file__)),
-    extensions=['jinja2.ext.autoescape'],
-    autoescape=True)
-
-
 
 class CssiUser(ndb.Model):
   """CssiUser stores information about a logged-in user.
@@ -24,7 +43,7 @@ class CssiUser(ndb.Model):
 
   If you want to store more info (e.g. their real name, high score,
   preferences, etc, you need to create a Datastore model like this
-  example).
+  example).  
   """
   first_name = ndb.StringProperty()
   last_name = ndb.StringProperty()
@@ -74,46 +93,9 @@ class MainHandler(webapp2.RequestHandler):
         last_name=self.request.get('last_name'),
         id=user.user_id())
     cssi_user.put()
-    self.response.write('Thanks for signing up, %s!' %
+    self.response.write('Thanks for signing up, %s!' % 
         cssi_user.first_name)
 
-class MainPage(webapp2.RequestHandler):
-    def get(self):
-        main_template = the_jinja_env.get_template('template/mainpage.html')
-        self.response.write(main_template.render())
-
-    def post(self):
-        main_template = the_jinja_env.get_template('template/mainpage.html')
-        self.response.write(main_template.render())
-
-class Expenses(webapp2.RequestHandler):
-    def get(self):
-        self.response.write("This is the expense page")
-    def post(self):
-        expense_template = the_jinja_env.get_template('template/expense.html')
-        date = self.request.get("date")
-        food = self.request.get('user-in-1')
-        price1 = self.request.get('user-in-2')
-        transportation = self.request.get('user-in-3')
-        price2 = self.request.get('user-in-4')
-        entertainment = self.request.get('user-in-5')
-        price3 = self.request.get('user-in-6')
-        variable_dict={
-            "date": date,
-            "food": food,
-            "price1": price1,
-            "transportation": transportation,
-            "price2": price2,
-            "entertainment": entertainment,
-            "price3": price3,
-        }
-        self.response.write(expense_template.render(variable_dict))
-        wrappeddate = datetime.strptime(date, "%Y-%m-%d")
-        expenses = Expense(date = wrappeddate, foods = food, price1 = price1, transportation = transportation, price2 = price2, entertainment = entertainment, price3 = price3)
-        expenses.put()
-
 app = webapp2.WSGIApplication([
-  ('/', MainHandler),
-  ('/mainpage', MainPage),
-  ('/expense', Expenses)
+  ('/', MainHandler)
 ], debug=True)
