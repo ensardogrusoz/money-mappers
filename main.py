@@ -3,6 +3,7 @@ import jinja2
 import os
 from dailyexpenses import Expense
 import json
+from datetime import datetime
 
 
 from google.appengine.api import users
@@ -90,7 +91,7 @@ class Expenses(webapp2.RequestHandler):
         self.response.write("This is the expense page")
     def post(self):
         expense_template = the_jinja_env.get_template('template/expense.html')
-        # date = self.request.get("date")
+        date = self.request.get("date")
         food = self.request.get('user-in-1')
         price1 = self.request.get('user-in-2')
         transportation = self.request.get('user-in-3')
@@ -98,7 +99,7 @@ class Expenses(webapp2.RequestHandler):
         entertainment = self.request.get('user-in-5')
         price3 = self.request.get('user-in-6')
         variable_dict={
-            # "date": date,
+            "date": date,
             "food": food,
             "price1": price1,
             "transportation": transportation,
@@ -107,7 +108,8 @@ class Expenses(webapp2.RequestHandler):
             "price3": price3,
         }
         self.response.write(expense_template.render(variable_dict))
-        expenses = Expense(foods = food, price1 = price1, transportation = transportation, price2 = price2, entertainment = entertainment, price3 = price3)
+        wrappeddate = datetime.strptime(date, "%Y-%m-%d")
+        expenses = Expense(date = wrappeddate, foods = food, price1 = price1, transportation = transportation, price2 = price2, entertainment = entertainment, price3 = price3)
         expenses.put()
 
 app = webapp2.WSGIApplication([
