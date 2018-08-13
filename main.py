@@ -92,13 +92,19 @@ class Expenses(webapp2.RequestHandler):
     def post(self):
         expense_template = the_jinja_env.get_template('template/expense.html')
         date = self.request.get("date")
-        food = self.request.get('user-in-1')
-        price1 = self.request.get('user-in-2')
+        food = self.request.get('user-in-1', allow_multiple=True)
+        # food_list = []
+        # food_list.append(food)
+        price1 = self.request.get('user-in-2', allow_multiple=True)
         transportation = self.request.get('user-in-3')
         price2 = self.request.get('user-in-4')
         entertainment = self.request.get('user-in-5')
         price3 = self.request.get('user-in-6')
+        # list = self.request.get('list')
+        # list2 = self.request.get('list2')
+        # list3 = self.request.get('list3')
         variable_dict={
+            # 'food_info': food_list,
             "date": date,
             "food": food,
             "price1": price1,
@@ -106,6 +112,9 @@ class Expenses(webapp2.RequestHandler):
             "price2": price2,
             "entertainment": entertainment,
             "price3": price3,
+            # "list": list,
+            # "list2": list2,
+            # "list3": list3,
         }
         self.response.write(expense_template.render(variable_dict))
         wrappeddate = datetime.strptime(date, "%Y-%m-%d")
