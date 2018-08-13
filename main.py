@@ -92,11 +92,15 @@ class Expenses(webapp2.RequestHandler):
     def post(self):
         expense_template = the_jinja_env.get_template('template/expense.html')
         date = self.request.get("date")
-        food = self.request.get('user-in-1', allow_multiple=True)
+        food = self.request.get_all('user-in-1')
+        print "GONNA PRINT FOOD"
+        print food
+
         # food_list = []
         # food_list.append(food)
-        price1 = self.request.get('user-in-2', allow_multiple=True)
-        transportation = self.request.get('user-in-3', allow_multiple=True)
+        price1 = self.request.get_all('user-in-2')
+        print price1
+        transportation = self.request.get_all('user-in-3')
         price2 = self.request.get('user-in-4')
         entertainment = self.request.get('user-in-5')
         price3 = self.request.get('user-in-6')
