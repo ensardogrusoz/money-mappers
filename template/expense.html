@@ -30,6 +30,10 @@
       background-color: #F5A612;
       color: white;
     }
+    .wrapper {
+    text-align: center;
+    }
+
     #Date{
       margin-left: 1180px;
     }
@@ -43,7 +47,9 @@
         <button type="button" class="btn btn-outline-light"><a href="welcome.html">Home</a></button>
         <button type="button" class="btn btn-outline-light"><a href="login.html">Login</a></button>
     </div>
-    <h2>{{date}}</h2>
+    <style>h1,h2,h3,h4 {font-family: "Poppins", sans-serif; text-align: center}</style>
+
+    <h2><font color=#2E8690>Here are your spendings for {{date}}</font></h2>
 
     <br>
     <h3>Food: </h3>
@@ -55,16 +61,14 @@
     <h3>Entertainment: </h3>
     <h4>{{entertainment}} - ${{price3}}</h4>
     <form action="/monthly" method="post">
+
+      <div class="wrapper">
       <button type="submit" class="btn btn-outline-success">Monthly Expenses</button>
+    </div>
     </form>
 
 
 
-
-=======
-    <h4>{{food}} - ${{price1}}
-    <h4>{{transportation}} - ${{price2}}</h4>
-    <h4>{{entertainment}} - ${{price3}}</h4>
 
   </body>
 </html>

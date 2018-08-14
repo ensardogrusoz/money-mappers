@@ -42,12 +42,15 @@ class Login(webapp2.RequestHandler):
             </form><br> %s <br>
             ''' % (signout_link_html))
 
+
     # Otherwise, the user isn't logged in!
     else:
       self.response.write('''
         Please log in to use our site! <br>
         <a href="%s">Sign in</a>''' % (
           users.create_login_url('/login')))
+
+
 
   def post(self):
     user = users.get_current_user()
