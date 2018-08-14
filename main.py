@@ -1,7 +1,7 @@
 import webapp2
 import jinja2
 import os
-from dailyexpenses import Date, Food_Ex, Transportation_Ex, Entertainment_Ex
+from dailyexpenses import Date, Food_Ex, Transportation_Ex, Entertainment_Ex, CssiUser
 import json
 from datetime import datetime
 
@@ -15,60 +15,51 @@ the_jinja_env = jinja2.Environment(
     autoescape=True)
 
 
-
-class CssiUser(ndb.Model):
-  """CssiUser stores information about a logged-in user.
-
-  The AppEngine users api stores just a couple of pieces of
-  info about logged-in users: a unique id and their email address.
-
-  If you want to store more info (e.g. their real name, high score,
-  preferences, etc, you need to create a Datastore model like this
-  example).
-  """
-  first_name = ndb.StringProperty()
-  last_name = ndb.StringProperty()
-
-class MainHandler(webapp2.RequestHandler):
+class Login(webapp2.RequestHandler):
   def get(self):
     user = users.get_current_user()
     # If the user is logged in...
     if user:
-      email_address = user.nickname()
+      first_name = user.nickname()
       cssi_user = CssiUser.get_by_id(user.user_id())
       signout_link_html = '<a href="%s">sign out</a>' % (
-          users.create_logout_url('/'))
+          users.create_logout_url('/login'))
       # If the user has previously been to our site, we greet them!
       if cssi_user:
         self.response.write('''
-            Welcome %s %s (%s)! <br> %s <br>''' % (
+            Welcome %s %s! <br> %s <br>''' % (
               cssi_user.first_name,
               cssi_user.last_name,
-              email_address,
               signout_link_html))
       # If the user hasn't been to our site, we ask them to sign up
       else:
         self.response.write('''
-            Welcome to our site, %s!  Please sign up! <br>
-            <form method="post" action="/">
+            Welcome to our site!  Please sign up! <br>
+            <form method="post" action="/mainpage">
             <input type="text" name="first_name">
             <input type="text" name="last_name">
             <input type="submit">
             </form><br> %s <br>
-            ''' % (email_address, signout_link_html))
+            ''' % (signout_link_html))
+
     # Otherwise, the user isn't logged in!
     else:
       self.response.write('''
         Please log in to use our site! <br>
         <a href="%s">Sign in</a>''' % (
-          users.create_login_url('/')))
+          users.create_login_url('/login')))
 
   def post(self):
     user = users.get_current_user()
     if not user:
-      # You shouldn't be able to get here without being logged in
-      self.error(500)
-      return
+          self.response.write('''
+              Welcome to our site!  Please sign up! <br>
+              <form method="post" action="/mainpage">
+              <input type="text" name="first_name">
+              <input type="text" name="last_name">
+              <input type="submit">
+              </form><br> %s <br>
+              ''' % (signout_link_html))
     cssi_user = CssiUser(
         first_name=self.request.get('first_name'),
         last_name=self.request.get('last_name'),
@@ -79,11 +70,49 @@ class MainHandler(webapp2.RequestHandler):
 
 class MainPage(webapp2.RequestHandler):
     def get(self):
-        main_template = the_jinja_env.get_template('template/mainpage.html')
-        self.response.write(main_template.render())
+        user = users.get_current_user()
+        cssi_user = CssiUser(
+            first_name=self.request.get('first_name'),
+            last_name=self.request.get('last_name'),
+            id=user.user_id())
+        cssi_user.put()
+        signout_link_html = '<a href="%s">sign out</a>' % (
+            users.create_logout_url('/login'))
+
+        if user:
+            user = users.get_current_user()
+            first_name = user.nickname()
+            main_template = the_jinja_env.get_template('template/mainpage.html')
+            variable_dic={
+                "first_name": first_name,
+            }
+            self.response.write('''
+                Welcome %s! <br> %s <br>''' % (
+                  cssi_user.first_name,
+                  signout_link_html))
+            self.response.write(main_template.render(variable_dic))
+        if cssi_user:
+          self.response.write('''
+              Welcome %s %s! <br> %s <br>''' % (
+                cssi_user.first_name,
+                cssi_user.last_name,
+                signout_link_html))
+        else:
+            self.response.write('''
+              Please log in to use this page! <br>
+              <a href="%s">Sign in</a>''' % (
+                users.create_login_url('/login')))
+
+          # You shouldn't be able to get here without being logged in
 
     def post(self):
+        user = users.get_current_user()
+        cssi_user = CssiUser.get_by_id(user.user_id())
         main_template = the_jinja_env.get_template('template/mainpage.html')
+        self.response.write('''
+            Welcome %s! <br> %s <br>''' % (
+              cssi_user.first_name,
+              signout_link_html))
         self.response.write(main_template.render())
 
 class Expenses(webapp2.RequestHandler):
@@ -92,11 +121,11 @@ class Expenses(webapp2.RequestHandler):
     def post(self):
         expense_template = the_jinja_env.get_template('template/expense.html')
         date = self.request.get("date")
+        foodList = []
         food = self.request.get_all('user-in-1')
-        print "GONNA PRINT FOOD"
-        print food
-
-        # food_list = []
+        while(not food == ''):
+            foodList.append(food)
+        print(foodList)
         # food_list.append(food)
         price1 = self.request.get_all('user-in-2')
         print price1
@@ -137,6 +166,7 @@ class Home(webapp2.RequestHandler):
 
 app = webapp2.WSGIApplication([
   ('/', Home),
+  ('/login', Login),
   ('/mainpage', MainPage),
   ('/expense', Expenses)
 ], debug=True)
