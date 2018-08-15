@@ -49,6 +49,7 @@ class Login(webapp2.RequestHandler):
       # Otherwise, the user isn't logged in!
       else:
         self.response.write('''
+<<<<<<< HEAD
           Please log in to use our site! <br>
           <a href="%s">Sign in</a>''' % (
             users.create_login_url('/login')))
@@ -70,6 +71,29 @@ class Login(webapp2.RequestHandler):
                 signout_link_html))
         # If the user hasn't been to our site, we ask them to sign up
         else:
+=======
+            Welcome to our site!  Please sign up! <br>
+            <form method="post" action="/mainpage">
+            <input type="text" name="first_name">
+            <input type="text" name="last_name">
+            <input type="submit">
+            </form><br> %s <br>
+            ''' % (signout_link_html))
+
+
+    # Otherwise, the user isn't logged in!
+    else:
+      self.response.write('''
+        Please log in to use our site! <br>
+        <a href="%s">Sign in</a>''' % (
+          users.create_login_url('/login')))
+
+
+
+  def post(self):
+    user = users.get_current_user()
+    if not user:
+>>>>>>> 403f05464155b0fa8a854bc66ee4ba92ceda3f22
           self.response.write('''
               Welcome to our site!  Please sign up! <br>
               <form method="post" action="/mainpage">
