@@ -32,13 +32,13 @@
       background-color: #F5A612;
       color: white;
     }
-    #Date{
-      margin-left: 1180px;
+    #div1{
+      margin-left: 600px;
+    }
+    #btn{
+      margin-left:45px;
     }
     </style>
-    <script>
-
-    </script>
   </head>
   <body>
     <div class = "topnav">
@@ -49,25 +49,15 @@
 
         <!-- <button type="button" class="btn btn-outline-light"><a href="login.html">Login</a></button> -->
     </div>
-    <h2>{{date}}</h2>
-    <form method=POST action="/expense">
-      <br>
-      <h3> Food: </h3>
-      Enter Food: <input type = "text" id = "food" name = "user-in-1"><br><br>
-      Enter Price: <input type = "text" id = "price1" name = "user-in-2">
-      <br>
-      <br>
-      <h3> Transportation: </h3>
-      Enter Transportation: <input type = "text" id = "transport" name = "user-in-3"><br><br>
-      Enter Price: <input type = "text" id = "price2" name = "user-in-4">
-      <br>
-      <br>
-      <h3> Entertainment: </h3>
-      Enter Entertainment: <input type = "text" id = "entertainment" name = "user-in-5"><br><br>
-      Enter Price: <input type = "text" id = "price3" name = "user-in-6">
-      <br>
-      <br>
-      <button type="submit" class="btn btn-outline-success">Continue</button>
-    </form>
+    <div id = "div1">
+      <form action="/mainpage" method="post">
+        <br>
+        <h2>Choose Date</h2>
+        <br>
+        <div id = "Date"> <input type = "date" name="date"> </div>
+        <br>
+        <button type="submit" id = "btn" class="btn btn-outline-success">Continue</button>
+      </form>
+    </div>
   </body>
 </html>

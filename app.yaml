@@ -1,5 +1,3 @@
-application: fortune-teller
-version: 1
 runtime: python27
 api_version: 1
 threadsafe: yes
@@ -11,7 +9,7 @@ handlers:
 
 - url: /images
   static_dir: images
-  
+
 #static directories should go ABOVE the catch all url (.*)
 - url: .*
   script: main.app

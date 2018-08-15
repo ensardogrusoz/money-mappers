@@ -40,31 +40,54 @@
   <body onload>
     <div class = "topnav">
         <img id= "logo" src="/images/moneymappers.png">
-        <button type="button" class="btn btn-outline-light"><a href="welcome.html">Home</a></button>
-        <button type="button" class="btn btn-outline-light"><a href="login.html">Login</a></button>
+        <form action="/" method="post">
+          <button type="submit" class="btn btn-outline-light">Home</button>
+        </form>
+
     </div>
     <h2>{{date}}</h2>
-
+    <form action="/start" method="post">
+      <button type="submit" class="btn btn-outline-dark">Add More Entries For The Day</button>
+    </form>
     <br>
     <h3>Food: </h3>
-    <h4>{{food}} - ${{price1}}</h4>
+    <ul>
+      {% for each_food in food_info %}
+      <li>
+        <h4>{{each_food.food}} - ${{each_food.price1}}</h4>
+      </li>
+      {% endfor %}
+    </ul>
     <br>
     <h3>Transportation: </h3>
+    <ul>
+      {% for each_tran in trans_info %}
+      <li>
+        <h4>{{each_tran.transportation}} - ${{each_tran.price2}}</h4>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <br>
+    <h3>Entertainment: </h3>
+    <ul>
+      {% for each_en in enter_info %}
+      <li>
+        <h4>{{each_en.entertainment}} - ${{each_en.price3}}</h4>
+      </li>
+      {% endfor %}
+    </ul>
+
+    <br>
+    <!-- <h3>Transportation: </h3>
     <h4>{{transportation}} - ${{price2}}</h4>
     <br>
     <h3>Entertainment: </h3>
-    <h4>{{entertainment}} - ${{price3}}</h4>
+    <h4>{{entertainment}} - ${{price3}}</h4> -->
     <form action="/monthly" method="post">
       <button type="submit" class="btn btn-outline-success">Monthly Expenses</button>
     </form>
 
-
-
-
-=======
-    <h4>{{food}} - ${{price1}}
-    <h4>{{transportation}} - ${{price2}}</h4>
-    <h4>{{entertainment}} - ${{price3}}</h4>
 
   </body>
 </html>
